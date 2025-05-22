@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eltheos - IT Precision</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F0F5F5;
+            overflow-x: hidden; /* Ensure no horizontal scroll */
+            line-height: 1.6;
+        }
+
+        /* Custom Teal Shades for Eltheos */
+        .bg-eltheos-primary { background-color: #1A908A; }
+        .text-eltheos-primary { color: #1A908A; }
+        .border-eltheos-primary { border-color: #1A908A; }
+        .hover\:bg-eltheos-dark:hover { background-color: #157A74; }
+
+        /* Translucent materials with subtle blur for depth */
+        .material-light {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .material-light-prominent {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .material-dark {
+            background-color: rgba(26, 144, 138, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* New transparent material for AI output and threshold message */
+        .material-transparent-output {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            color: white;
+        }
+        .material-transparent-output p {
+            color: white;
+            font-size: 1.25rem;
+        }
+        .material-transparent-output .text-eltheos-primary {
+            color: #1A908A;
+        }
+
+
+        /* Hero section background: subtle radial gradient for depth */
+        .hero-bg-gradient {
+            background: radial-gradient(circle at top left, #1A908A, #20B2AA 70%, #3CB371);
+        }
+
+        /* Subtle, organic background animation for the hero section */
+        @keyframes subtle-flow {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.08; }
+            33% { transform: translate(10px, -5px) scale(1.02); opacity: 0.06; }
+            66% { transform: translate(-10px, 5px) scale(0.98); opacity: 0.07; }
+            100% { transform: translate(0, 0) scale(1); opacity: 0.08; }
+        }
+        .animate-subtle-flow {
+            animation: subtle-flow 15s infinite ease-in-out;
+        }
+
+        /* Enhanced button styling */
+        .btn-primary {
+            background-color: #1A908A;
+            color: white;
+            padding: 0.85rem 2.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(26, 144, 138, 0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-primary:hover {
+            background-color: #157A74;
+            box-shadow: 0 12px 25px rgba(26, 144, 138, 0.4);
+            transform: translateY(-2px);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 10px rgba(26, 144, 138, 0.2);
+        }
+
+        /* Input field styling */
+        .input-field {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 1rem 1.25rem;
+            border-radius: 0.75rem;
+            transition: all 0.2s ease-in-out;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #1A908A;
+            box-shadow: 0 0 0 3px rgba(26, 144, 138, 0.2);
+        }
+
+        /* Combined input and send button container */
+        .input-send-container {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+        .input-send-container:focus-within {
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+        }
+        .input-send-container .input-field-flex {
+            flex-grow: 1;
+            border: none;
+            background-color: transparent;
+            padding: 1rem 0 1rem 1.25rem; /* Smaller padding for mobile first */
+            outline: none;
+            color: white;
+            font-weight: 300;
+            font-size: 1.125rem; /* text-lg for mobile */
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .input-send-container .input-field-flex {
+                padding: 1.75rem 0 1.75rem 2rem; /* Larger padding for desktop */
+                font-size: 1.5rem; /* text-2xl for desktop */
+            }
+        }
+        .input-send-container .input-field-flex::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .input-send-container .send-button {
+            padding: 1rem 1rem; /* Adjusted padding to match input height for mobile */
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0 0.75rem 0.75rem 0;
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .input-send-container .send-button {
+                padding: 1.75rem 1.75rem; /* Adjusted padding for desktop */
+            }
+        }
+        .input-send-container .send-button:hover {
+            color: rgba(255, 255, 255, 0.8);
+            transform: translateX(2px);
+        }
+        .input-send-container .send-button:active {
+            transform: translateX(0);
+        }
+
+
+        /* Card styling for services */
+        .service-card {
+            @apply material-light p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 relative overflow-hidden;
+            border-top: 4px solid #1A908A;
+            min-width: 0;
+        }
+        .service-card .content {
+            position: relative;
+            z-index: 1;
+            padding: 1rem;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(26, 144, 138, 0.05) 0%, transparent 70%);
+            transform: rotate(45deg);
+            transition: transform 0.4s ease-out;
+            z-index: 0;
+        }
+        .service-card:hover::before {
+            transform: rotate(0deg);
+        }
+        .service-card .content p {
+            word-break: break-word;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #1A908A;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Header show/hide on scroll */
+        .main-header {
+            transition: transform 0.3s ease-out;
+            transform: translateY(-100%);
+        }
+        .main-header.scrolled-active {
+            transform: translateY(0);
+        }
+
+        /* Mobile Menu Specific Styles */
+        #mobile-menu {
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            z-index: 40;
+        }
+        #mobile-menu.is-active {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased">
+    <header id="main-header" class="main-header material-light py-4 fixed w-full z-50 top-0 rounded-b-xl">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="text-4xl font-extrabold text-eltheos-primary tracking-tight rounded-md p-2">Eltheos</a>
+            
+            <nav class="hidden md:block">
+                <ul class="flex space-x-8">
+                    <li><a href="#home" class="text-gray-700 hover:text-eltheos-primary font-medium transition duration-300 rounded-md p-2">Home</a></li>
+                    <li><a href="#services" class="text-gray-700 hover:text-eltheos-primary font-medium transition duration-300 rounded-md p-2">Services</a></li>
+                    <li><a href="#about" class="text-gray-700 hover:text-eltheos-primary font-medium transition duration-300 rounded-md p-2">About</a></li>
+                    <li><a href="#contact" class="text-gray-700 hover:text-eltheos-primary font-medium transition duration-300 rounded-md p-2">Contact</a></li>
+                </ul>
+            </nav>
+
+            <button id="mobile-menu-toggle" class="md:hidden text-eltheos-primary p-2 focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <nav id="mobile-menu" class="fixed inset-0 bg-eltheos-primary bg-opacity-95 flex flex-col items-center justify-center space-y-8 text-white text-3xl opacity-0 invisible transition-all duration-300 ease-in-out">
+        <button id="mobile-menu-close" class="absolute top-6 right-6 text-white p-2 focus:outline-none">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+        <ul class="flex flex-col space-y-8 text-center">
+            <li><a href="#home" class="hover:text-gray-300 transition duration-300 mobile-nav-link">Home</a></li>
+            <li><a href="#services" class="hover:text-gray-300 transition duration-300 mobile-nav-link">Services</a></li>
+            <li><a href="#about" class="hover:text-gray-300 transition duration-300 mobile-nav-link">About</a></li>
+            <li><a href="#contact" class="hover:text-gray-300 transition duration-300 mobile-nav-link">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="relative hero-bg-gradient text-white min-h-screen flex flex-col items-center justify-center overflow-hidden w-full px-6">
+        <div class="relative z-10 flex flex-col items-center justify-center flex-grow max-w-screen-2xl mx-auto">
+            <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-8 drop-shadow-md tracking-tight">
+                Eltheos
+            </h1>
+            <p class="text-xl md:text-2xl max-w-4xl mx-auto mb-12 opacity-90 font-light drop-shadow-sm">
+                We design and implement IT solutions that are not just functional, but inherently intuitive, secure, and supportive. Experience the insight that comes with truly harmonious technology.
+            </p>
+            
+            <a href="#contact" class="btn-primary mb-16 smooth-scroll"> Begin Your Journey to Insight
+                <svg class="ml-3 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </a>
+
+            <div class="max-w-4xl mx-auto w-full pb-16 md:pb-24"> <h2 class="text-3xl font-extrabold text-center mb-6 text-white tracking-tight drop-shadow-sm">
+                    Your IT Future, Instantly Clear.
+                </h2>
+
+                <div id="ai-input-section">
+                    <div class="input-send-container">
+                        <input type="text" id="it-challenge-input" placeholder="Describe what your company does..." class="input-field-flex" required>
+                        <button id="get-recommendation-btn" class="send-button">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="threshold-reached-message" class="hidden text-center mt-8 p-6 material-transparent-output">
+                    <p class="text-xl font-semibold mb-2">AI Recommender Limit Reached</p>
+                    <p>You have used the AI recommender the maximum number of times. Please contact us directly for further assistance!</p>
+                    <p class="mt-4 text-eltheos-primary">Thank you for your interest in Eltheos.</p>
+                </div>
+
+                <div id="loading-indicator" class="hidden flex justify-center items-center mt-8">
+                    <div class="spinner"></div>
+                    <p class="ml-4 text-eltheos-primary font-medium">Generating your personalized recommendation...</p>
+                </div>
+                <div id="recommendation-output" class="mt-8 p-6 material-transparent-output hidden">
+                    <p id="recommendation-text"></p>
+                </div>
+            </div>
+        </div>
+        <div class="absolute inset-0 z-0">
+            <div class="w-96 h-96 bg-white opacity-10 rounded-full absolute -top-20 -left-20 animate-subtle-flow"></div>
+            <div class="w-80 h-80 bg-white opacity-10 rounded-full absolute -bottom-10 -right-10 animate-subtle-flow" style="animation-delay: 2s;"></div>
+            <div class="w-72 h-72 bg-white opacity-10 rounded-full absolute top-1/4 left-1/3 animate-subtle-flow" style="animation-delay: 4s;"></div>
+            <div class="w-1/2 h-1/2 bg-white opacity-5 rounded-full absolute bottom-1/3 right-1/4 animate-subtle-flow" style="animation-delay: 6s;"></div>
+        </div>
+    </section>
+
+    <section id="services" class="py-20 md:py-32 bg-gray-50 relative w-full px-6">
+        <div class="container mx-auto">
+            <h2 class="text-5xl font-extrabold text-center mb-16 text-eltheos-primary tracking-tight">Foundations of Effective IT</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="service-card">
+                    <div class="content">
+                        <div class="text-eltheos-primary text-7xl mb-6 text-center">
+                            &#x1F510; </div>
+                        <h3 class="text-3xl font-semibold mb-4 text-center">Fortified Cybersecurity</h3>
+                        <p class="text-gray-700 text-center font-light">
+                            Robust defenses and proactive strategies to protect your digital realm, ensuring unwavering security against threats.
+                        </p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="content">
+                        <div class="text-eltheos-primary text-7xl mb-6 text-center">
+                            &#x2601;&#xFE0F; </div>
+                        <h3 class="text-3xl font-semibold mb-4 text-center">Seamless Cloud Integration</h3>
+                        <p class="text-gray-700 text-center font-light">
+                            Effortlessly transition to scalable cloud environments, optimizing efficiency and accessibility for your team.
+                        </p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="content">
+                        <div class="text-eltheos-primary text-7xl mb-6 text-center">
+                            &#x2699;&#xFE0F; </div>
+                        <h3 class="text-3xl font-semibold mb-4 text-center">Optimized Infrastructure</h3>
+                        <p class="text-gray-700 text-center font-light">
+                            Maintain a stable and high-performing IT backbone, allowing your operations and people to run smoothly.
+                        </p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="content">
+                        <div class="text-eltheos-primary text-7xl mb-6 text-center">
+                            &#x1F4A1; </div>
+                        <h3 class="text-3xl font-semibold mb-4 text-center">Strategic IT Advisory</h3>
+                        <p class="text-gray-700 text-center font-light">
+                            Receive expert guidance to align your technology strategy with your business goals, fostering growth and innovation.
+                        </p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="content">
+                        <div class="text-eltheos-primary text-7xl mb-6 text-center">
+                            &#x1F4CA; </div>
+                        <h3 class="text-3xl font-semibold mb-4 text-center">Insightful Data Analytics</h3>
+                        <p class="text-gray-700 text-center font-light">
+                            Transforming complex data into clear, actionable insights to guide your strategic decisions and empower your team.
+                        </p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="content">
+                        <div class="text-eltheos-primary text-7xl mb-6 text-center">
+                            &#x231B; </div>
+                        <h3 class="text-3xl font-semibold mb-4 text-center">Proactive Managed Services</h3>
+                        <p class="text-gray-700 text-center font-light">
+                            Dedicated support that anticipates needs, resolving issues before they impact your operations or productivity.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-20 md:py-32 bg-eltheos-primary text-white relative overflow-hidden w-full px-6">
+        <div class="max-w-5xl mx-auto text-center relative z-10">
+            <h2 class="text-5xl font-extrabold mb-8 drop-shadow-md tracking-tight">The Eltheos Ethos</h2>
+            <p class="text-xl leading-relaxed mb-8 opacity-90 font-light">
+                At Eltheos, our ethos is built upon <strong>foundational excellence and human-centric innovation</strong>. We believe technology should empower people, not complicate their work. Our commitment is to simplify, secure, and streamline your IT landscape through a deeply human-centric approach, allowing your team to focus on what truly matters: innovation and growth.
+            </p>
+            <p class="text-xl leading-relaxed opacity-90 font-light">
+                We are meticulously focused on understanding your unique challenges and aspirations. Our solutions are designed not just for systems, but for the people who use them, ensuring intuitive experiences and seamless integration into your operational flow. We aim to be your trusted partner, building resilient IT foundations that serve your human capital effectively.
+            </p>
+        </div>
+        <div class="absolute inset-0 z-0">
+            <div class="w-full h-full bg-white opacity-5 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-subtle-flow" style="width: 120%; height: 120%;"></div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 md:py-32 bg-gray-50 relative w-full px-6">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-5xl font-extrabold mb-12 text-eltheos-primary tracking-tight">Connect with Eltheos</h2>
+            <p class="text-xl mb-12 text-gray-700 font-light">
+                Ready to transform your IT challenges into opportunities for growth and insight? Reach out to us.
+            </p>
+            <div class="space-y-6 mb-16 text-left">
+                <p class="text-2xl font-semibold text-gray-800 flex items-center justify-center">
+                    <span class="mr-3 text-eltheos-primary">&#x2709;&#xFE0F;</span> Email: <a href="mailto:info@eltheos.com" class="underline text-eltheos-primary hover:text-eltheos-dark ml-2">info@eltheos.com</a>
+                </p>
+                <p class="text-2xl font-semibold text-gray-800 flex items-center justify-center">
+                    <span class="mr-3 text-eltheos-primary">&#x260E;&#xFE0F;</span> Phone: <a href="tel:+11234567890" class="underline text-eltheos-primary hover:text-eltheos-dark ml-2">+1 (123) 456-7890</a>
+                </p>
+                <p class="text-2xl font-semibold text-gray-800 flex items-center justify-center">
+                    <span class="mr-3 text-eltheos-primary">&#x1F3E2;</span> Address: 123 Innovation Lane, Digital City, TX 78701
+                </p>
+            </div>
+            <form class="mt-12 p-10 material-light rounded-3xl shadow-2xl border-eltheos-primary border-opacity-20">
+                <div class="mb-6">
+                    <input type="text" placeholder="Your Name" class="input-field w-full text-gray-800" required>
+                </div>
+                <div class="mb-6">
+                    <input type="email" placeholder="Your Email" class="input-field w-full text-gray-800" required>
+                </div>
+                <div class="mb-6">
+                    <textarea placeholder="Your Message" rows="6" class="input-field w-full text-gray-800" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary w-full md:w-auto">
+                    Send Your Inquiry
+                    <svg class="ml-3 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-gray-400 py-10 text-center rounded-t-xl">
+        <div class="container mx-auto px-6">
+            <p class="text-lg font-light">&copy; 2025 Eltheos IT Consulting. All rights reserved.</p>
+            <p class="mt-3 text-md font-extralight">Crafting precision, inspiring innovation.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainHeader = document.getElementById('main-header');
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuClose = document.getElementById('mobile-menu-close');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+            const getRecommendationBtn = document.getElementById('get-recommendation-btn');
+            const itChallengeInput = document.getElementById('it-challenge-input');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const recommendationOutput = document.getElementById('recommendation-output');
+            const recommendationText = document.getElementById('recommendation-text');
+            const aiInputSection = document.getElementById('ai-input-section');
+            const thresholdReachedMessage = document.getElementById('threshold-reached-message');
+
+            // --- Header Show/Hide on Scroll ---
+            let lastScrollY = 0;
+            const scrollThreshold = 100; // Pixels to scroll down before header appears
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > scrollThreshold) {
+                    mainHeader.classList.add('scrolled-active');
+                } else {
+                    mainHeader.classList.remove('scrolled-active');
+                }
+                lastScrollY = window.scrollY;
+            });
+
+            // --- Mobile Menu Toggle ---
+            mobileMenuToggle.addEventListener('click', (event) => {
+                event.stopPropagation();
+                mobileMenu.classList.toggle('is-active');
+            });
+
+            mobileMenuClose.addEventListener('click', () => {
+                mobileMenu.classList.remove('is-active');
+            });
+
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('is-active');
+                });
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!mobileMenu.contains(event.target) && !mobileMenuToggle.contains(event.target) && mobileMenu.classList.contains('is-active')) {
+                    mobileMenu.classList.remove('is-active');
+                }
+            });
+
+            // --- Smooth Scroll for Anchor Links ---
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+
+                    if (targetElement) {
+                        const headerHeight = mainHeader.offsetHeight;
+                        const offset = targetElement.getBoundingClientRect().top + window.scrollY - headerHeight;
+
+                        window.scrollTo({
+                            top: offset,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+
+            // --- AI Usage Threshold Configuration ---
+            const MAX_AI_USES = 3;
+            const LOCAL_STORAGE_KEY = 'eltheos_ai_uses';
+            const MAX_AI_RESPONSE_CHARS = 250;
+
+            // --- Dynamic Placeholder Configuration ---
+            const placeholders = [
+                'Describe what your company does...',
+                'Tell us what IT challenges you are facing...',
+                'What are your current technology needs?',
+                'How can we help bring clarity to your IT?',
+                'Share your business goals and IT aspirations...'
+            ];
+            let currentPlaceholderIndex = 0;
+            let placeholderInterval;
+
+            // Function to update UI based on usage count
+            function updateAISectionVisibility() {
+                let currentUses = parseInt(localStorage.getItem(LOCAL_STORAGE_KEY) || '0', 10);
+
+                if (currentUses >= MAX_AI_USES) {
+                    aiInputSection.classList.add('hidden');
+                    thresholdReachedMessage.classList.remove('hidden');
+                } else {
+                    aiInputSection.classList.remove('hidden');
+                    thresholdReachedMessage.classList.add('hidden');
+                }
+            }
+
+            // Function to cycle placeholders
+            function cyclePlaceholder() {
+                itChallengeInput.placeholder = placeholders[currentPlaceholderIndex];
+                currentPlaceholderIndex = (currentPlaceholderIndex + 1) % placeholders.length;
+            }
+
+            // Start cycling placeholders on page load
+            cyclePlaceholder();
+            placeholderInterval = setInterval(cyclePlaceholder, 4000);
+
+            // Stop cycling when user starts typing
+            itChallengeInput.addEventListener('input', () => {
+                clearInterval(placeholderInterval);
+            });
+
+            // Handle Enter key press for the input field
+            itChallengeInput.addEventListener('keyup', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    getRecommendationBtn.click();
+                }
+            });
+
+            // Initial check when the page loads
+            updateAISectionVisibility();
+
+            getRecommendationBtn.addEventListener('click', async () => {
+                const userChallenge = itChallengeInput.value.trim();
+
+                if (!userChallenge) {
+                    itChallengeInput.style.borderColor = 'red';
+                    itChallengeInput.placeholder = 'Please describe your challenges to get a recommendation!';
+                    setTimeout(() => {
+                        itChallengeInput.style.borderColor = '';
+                        if (!itChallengeInput.value.trim()) {
+                            clearInterval(placeholderInterval);
+                            currentPlaceholderIndex = 0;
+                            cyclePlaceholder();
+                            placeholderInterval = setInterval(cyclePlaceholder, 4000);
+                        }
+                    }, 3000);
+                    return;
+                }
+
+                let currentUses = parseInt(localStorage.getItem(LOCAL_STORAGE_KEY) || '0', 10);
+                currentUses++;
+                localStorage.setItem(LOCAL_STORAGE_KEY, currentUses);
+
+                aiInputSection.classList.add('hidden');
+                loadingIndicator.classList.remove('hidden');
+                loadingIndicator.classList.add('flex');
+                recommendationOutput.classList.add('hidden');
+                recommendationText.textContent = '';
+
+                try {
+                    const prompt = `You are an IT consultant from Eltheos, a company focused on bringing clarity and human-centric solutions to IT. A potential client is describing their business and IT challenges. Based on their description, suggest which of Eltheos's core services would be most beneficial to them, and provide a brief, high-level strategic recommendation. Keep your response concise, professional, and aligned with Eltheos's ethos of empowering people through seamless technology. Your response MUST be no longer than ${MAX_AI_RESPONSE_CHARS} characters.
+                    
+                    Please respond in the same language as the client's description.
+
+Client's description: ${userChallenge}
+
+Eltheos Services:
+- Fortified Cybersecurity
+- Seamless Cloud Integration
+- Optimized Infrastructure
+- Strategic IT Advisory
+- Insightful Data Analytics
+- Proactive Managed Services
+
+Please provide your recommendation in a clear, easy-to-understand paragraph.`;
+
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        let text = result.candidates[0].content.parts[0].text;
+                        recommendationText.textContent = text;
+                        recommendationOutput.classList.remove('hidden');
+                    } else {
+                        recommendationText.textContent = 'Sorry, I could not generate a recommendation at this time. Please try again.';
+                        recommendationOutput.classList.remove('hidden');
+                        console.error('Unexpected LLM response structure:', result);
+                    }
+                } catch (error) {
+                    recommendationText.textContent = 'An error occurred while fetching the recommendation. Please check your network connection and try again.';
+                    recommendationOutput.classList.remove('hidden');
+                    console.error('Error calling Gemini API:', error);
+                } finally {
+                    loadingIndicator.classList.add('hidden');
+                    loadingIndicator.classList.remove('flex');
+                    updateAISectionVisibility();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
