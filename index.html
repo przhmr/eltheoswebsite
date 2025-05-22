@@ -22,12 +22,22 @@
 
         /* Translucent materials with subtle blur for depth */
         .material-light {
-            background-color: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.6); /* Increased transparency for mobile */
+            backdrop-filter: blur(10px); /* Increased blur for mobile */
+            -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0 0 0.75rem 0.75rem; /* Default mobile rounded-b-xl */
         }
+        @media (min-width: 768px) { /* md breakpoint for desktop opacity and rounding */
+            .material-light {
+                background-color: rgba(255, 255, 255, 0.5); /* Changed to 50% opacity for desktop */
+                backdrop-filter: blur(12px); /* Even more blur for desktop */
+                -webkit-backdrop-filter: blur(12px);
+                border-radius: 0 0 1.5rem 1.5rem; /* Increased to rounded-b-3xl for desktop */
+            }
+        }
+
         .material-light-prominent {
             background-color: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
@@ -397,7 +407,7 @@
         <div class="max-w-5xl mx-auto text-center relative z-10">
             <h2 class="text-5xl font-extrabold mb-8 drop-shadow-md tracking-tight">Our Ethos</h2>
             <p class="text-xl leading-relaxed mb-8 opacity-90 font-light">
-                Eltheos is built upon a vision of <strong>  impactful innovation and human-centered design</strong>. We believe technology should empower people, not complicate their work. Our commitment is to simplify, secure, and streamline your IT landscape through a deeply human-centric approach, allowing your team to focus on what truly matters: innovation and growth.
+                Eltheos is built upon a vision of <strong>impactful innovation and human-centered design</strong>. We believe technology should empower people, not complicate their work. Our commitment is to simplify, secure, and streamline your IT landscape through a deeply human-centric approach, allowing your team to focus on what truly matters: innovation and growth.
             </p>
             <p class="text-xl leading-relaxed opacity-90 font-light">
                 We are meticulously focused on understanding your unique challenges and aspirations. Our solutions are designed not just for systems, but for the people who use them, ensuring intuitive experiences and seamless integration into your operational flow. We aim to be your trusted partner, building resilient IT foundations that serve your human capital effectively.
